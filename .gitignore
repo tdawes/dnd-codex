@@ -1,0 +1,9 @@
+**/dist
+**/node_modules
+**/.cache
+
+.firebase/
+
+.envrc.local
+
+yarn-error.log

@@ -1,0 +1,39 @@
+service cloud.firestore {
+    match /databases/{database}/documents {
+        match /users/{user} {
+            allow read;
+        }
+
+        match /collections/{collection} {
+            allow create: if isAdmin() || userIs(request.resource.data.owner);
+            allow update: if isAdmin() || userIs(resource.data.owner);
+            allow read: if resource.data.core || isAdmin() || userIs(resource.data.owner);
+        }
+
+        match /character-classes/{class} {
+          allow create: if isAdmin() || userIs(get(/databases/$(database)/documents/collections/$(request.resource.data.collection)).data.owner);
+          allow update: if isAdmin() || userIs(get(/databases/$(database)/documents/collections/$(resource.data.collection)).data.owner);
+          allow read: if resource.data.core || isAdmin() || userIs(get(/databases/$(database)/documents/collections/$(resource.data.collection)).data.owner);
+        }
+        
+        match /character-races/{class} {
+          allow create: if isAdmin() || userIs(get(/databases/$(database)/documents/collections/$(request.resource.data.collection)).data.owner);
+          allow update: if isAdmin() || userIs(get(/databases/$(database)/documents/collections/$(resource.data.collection)).data.owner);
+          allow read: if resource.data.core || isAdmin() || userIs(get(/databases/$(database)/documents/collections/$(resource.data.collection)).data.owner);
+        }
+        
+        match /characters/{class} {
+          allow create: if isAdmin() || userIs(get(/databases/$(database)/documents/collections/$(request.resource.data.collection)).data.owner);
+          allow update: if isAdmin() || userIs(get(/databases/$(database)/documents/collections/$(resource.data.collection)).data.owner);
+          allow read: if resource.data.core || isAdmin() || userIs(get(/databases/$(database)/documents/collections/$(resource.data.collection)).data.owner);
+        }
+
+        function isAdmin() {
+            return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin
+        }
+
+        function userIs(uid) {
+            return request.auth.uid == uid
+        }
+    }
+}

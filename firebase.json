@@ -1,0 +1,35 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "predeploy": [
+      "yarn workspace functions lint",
+      "yarn workspace functions build"
+    ],
+    "source": "apps/functions"
+  },
+  "hosting": {
+    "predeploy": ["yarn workspace ui lint", "yarn workspace ui build"],
+    "public": "apps/ui/dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "database": {
+      "port": 9000
+    },
+    "hosting": {
+      "port": 5000
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "dnd-codex",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": "10"
+  },
+  "scripts": {
+    "start": "yarn workspace ui start"
+  },
+  "devDependencies": {
+    "firebase-tools": "^7.13.0",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.5"
+  },
+  "workspaces": [
+    "apps/*"
+  ]
+}
