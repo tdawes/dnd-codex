@@ -1,17 +1,45 @@
 import * as React from "react";
-import { Item } from "./types/items";
 import ItemCard from "./components/ItemCard";
+import styled from "@emotion/styled";
 
-const item: Item = {
-  name: "Stormbinder",
-  type: "weapon",
-  subtype: "battleaxe",
-  modifier: 2,
-  rarity: "very rare",
-  requiresAttunement: true,
-  image: "08e76a07-089b-404d-96d7-282abcc2a4b0",
-  description:
-    "You gain a +2 bonus to attack rolls and damage rolls using this axe, and hits deal an additional 1d8 lightning damage. In addition, this axe has the thrown property, with a range of 20/60 feet. You can use an action to hold out a hand and summon the axe. So long as the axe is on the same plane of existence, it will fly towards your outstretched hand, travelling up to 300 feet per round so long as you continue using your action in this way. When the axe reaches you, you catch it in your outstretched hand, and may immediately make a single attack with it.",
-};
+const Page = styled.div`
+  width: 210mm;
+  height: 290mm;
 
-export default () => <ItemCard item={item} />;
+  display: grid;
+  grid-template-columns: 50% 50%;
+  page-break-after: always;
+`;
+
+const Cell = styled.div`
+  border-style: dashed;
+  margin: 1em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export default () => (
+  <React.Fragment>
+    <Page>
+      <Cell>
+        <ItemCard id="stormbinder" />
+      </Cell>
+      <Cell>
+        <ItemCard id="augur-stone" />
+      </Cell>
+      <Cell>
+        <ItemCard id="ring-of-roses" />
+      </Cell>
+      <Cell>
+        <ItemCard id="rope-of-climbing" />
+      </Cell>
+    </Page>
+    <Page>
+      <Cell>
+        <ItemCard id="dust-of-sneezing-and-choking" />
+      </Cell>
+    </Page>
+  </React.Fragment>
+);

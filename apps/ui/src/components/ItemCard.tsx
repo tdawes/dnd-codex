@@ -1,11 +1,16 @@
 import * as React from "react";
 import { Item, Weapon, Caster } from "../types/items";
 import FirebaseImage from "./common/FirebaseImage";
-import TextFit from "react-textfit";
+import ItemCardLayout from "./ItemCardLayout";
 import styled from "@emotion/styled";
+import { useDocumentData } from "react-firebase-hooks/firestore";
+import * as firebase from "firebase";
+import DynamicLayout from "./common/DynamicLayout";
+
+type ItemId = string;
 
 export interface Props {
-  item: Item;
+  id: ItemId;
 }
 
 const modifier = (m: number) => {
@@ -72,6 +77,7 @@ const Card = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 1em;
+  margin: 1em;
   overflow: hidden;
   box-sizing: content-box;
   font-family: pristina;
@@ -99,43 +105,49 @@ const Description = styled.div`
   text-align: center;
 `;
 
-export const useForceRerender = () => {
-  const ref = React.useRef<TextFit>();
-  return [
-    ref,
-    () => {
-      if (ref.current != null) {
-        ref.current.process();
-      }
-    },
-  ] as const;
-};
+export default ({ id }: Props) => {
+  const [item, loading, error] = useDocumentData(
+    firebase
+      .firestore()
+      .collection("items")
+      .doc(id),
+  );
 
-export default ({ item }: Props) => {
-  const [ref, forceRerender] = useForceRerender();
+  const layoutRef = React.useRef<DynamicLayout>(null);
+  const recalculateSize = React.useCallback(() => {
+    if (layoutRef.current != null) {
+      layoutRef.current.process();
+    }
+  }, [layoutRef]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
 
   return (
     <Card>
       <Header>{item.name}</Header>
       <Summary>{getSummary(item)}</Summary>
-      <FirebaseImage
-        width={256}
-        url={`images/${item.image}.png`}
-        onLoad={forceRerender}
-        style={{ marginBottom: "24px" }}
-      />
-      <TextFit
-        ref={ref}
-        max={16}
-        min={10}
-        style={{
-          flexGrow: 1,
-          flexShrink: 1,
-          overflow: "hidden",
-        }}
-      >
-        <Description>{item.description}</Description>
-      </TextFit>
+      <ItemCardLayout ref={layoutRef}>
+        <FirebaseImage
+          className="image"
+          key="image"
+          url={`images/${item.image}.png`}
+          onLoad={recalculateSize}
+          style={{
+            width: "auto",
+            height: "auto",
+            maxHeight: "128px",
+            maxWidth: "100%",
+            objectFit: "contain",
+          }}
+        />
+        <Description className="description">{item.description}</Description>
+      </ItemCardLayout>
     </Card>
   );
 };

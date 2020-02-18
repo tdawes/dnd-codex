@@ -4,7 +4,6 @@ import { useDownloadURL } from "react-firebase-hooks/storage";
 
 export type Props = {
   url: string;
-  width: number;
 } & React.ImgHTMLAttributes<HTMLImageElement>;
 
 const Spinner = () => <div>Loading...</div>;
