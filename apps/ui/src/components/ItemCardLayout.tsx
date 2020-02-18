@@ -30,7 +30,7 @@ const Layout = styled.div<{ value: number }>`
     }
 
     .description {
-      display: inline;
+      display: inherit;
     }
   }
 `;
