@@ -41,7 +41,7 @@ const defaults = {
   [ItemType.WondrousItem]: {},
 };
 
-const fields: { [key: string]: FormType<any> } = {
+const fields: { [key: string]: FormType } = {
   name: {
     type: "string",
     label: "Name",
@@ -67,9 +67,13 @@ const fields: { [key: string]: FormType<any> } = {
     folder: "images",
     fileTypes: [".png"],
   },
+  requiresAttunement: {
+    type: "optional-list",
+    label: "Requires Attunement?",
+  },
 };
 
-const templates: { [key: string]: Template<any> } = {
+const templates: { [key: string]: Template } = {
   weapon: {
     name: fields.name,
     subtype: {
@@ -81,6 +85,7 @@ const templates: { [key: string]: Template<any> } = {
     rarity: fields.rarity,
     description: fields.description,
     image: fields.image,
+    requiresAttunement: fields.requiresAttunement,
   },
 };
 
@@ -98,7 +103,7 @@ export default () => {
           value: ItemType[k],
         }))}
         value={{ label: item.type, value: item.type }}
-        onChange={({ value }) =>
+        onChange={({ value }: any) =>
           setItem({ ...defaults[value], ...item, type: value })
         }
       />

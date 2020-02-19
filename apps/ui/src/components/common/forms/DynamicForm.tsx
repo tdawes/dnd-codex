@@ -1,9 +1,15 @@
+import * as _ from "lodash";
 import * as React from "react";
 import styled from "@emotion/styled";
 import { Item } from "../../../types/items";
-import Select from "react-select";
-import newUUID from "uuid/v4";
-import * as firebase from "firebase";
+import CheckboxFormField from "./CheckboxFormField";
+import TextFormField from "./TextFormField";
+import NumberFormField from "./NumberFormField";
+import RangeFormField from "./RangeFormField";
+import EnumFormField from "./EnumFormField";
+import FileUploadFormField from "./FileUploadFormField";
+import ListFormField from "./ListFormField";
+import OptionalListFormField from "./OptionalListFormField";
 
 interface BaseFormType {
   label?: string;
@@ -31,6 +37,12 @@ export interface StringFormType extends BaseFormType {
 export interface BooleanFormType extends BaseFormType {
   type: "boolean";
 }
+export interface ListFormType extends BaseFormType {
+  type: "list";
+}
+export interface OptionalListFormType extends BaseFormType {
+  type: "optional-list";
+}
 
 export interface FileFormType extends BaseFormType {
   type: "file";
@@ -38,23 +50,23 @@ export interface FileFormType extends BaseFormType {
   fileTypes?: string[];
 }
 
-export type FormType<T> = T extends boolean
-  ? BooleanFormType
-  : T extends NumberFormType
-  ? NumberFormType | RangeFormType
-  : T extends string
-  ? string extends T
-    ? StringFormType | FileFormType
-    : EnumFormType
-  : EnumFormType;
+export type FormType =
+  | BooleanFormType
+  | NumberFormType
+  | RangeFormType
+  | StringFormType
+  | FileFormType
+  | EnumFormType
+  | ListFormType
+  | OptionalListFormType;
 
-export type Template<I extends Item> = { [K in keyof I]: FormType<I[K]> };
+export type Template = { [key: string]: FormType };
 
-export interface Props<I extends Item> {
-  template: Template<I>;
-  item: I;
-  setField: <K extends keyof I>(key: K, value: I[K]) => void;
-  order?: (keyof I)[];
+export interface Props {
+  template: Template;
+  item: Item;
+  setField: (key: string, value: any) => void;
+  order?: string[];
 }
 
 const Form = styled.form`
@@ -62,104 +74,73 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-export default <I extends Item>(props: Props<I>) => {
+export interface FormFieldProps {
+  field: FormType;
+  value: any;
+  set: (value: any) => void;
+}
+
+const FormField = (props: FormFieldProps) => {
+  if (props.field.type === "boolean") {
+    return (
+      <CheckboxFormField checked={!!props.value} onChange={v => props.set(v)} />
+    );
+  } else if (props.field.type === "string") {
+    return <TextFormField value={props.value} onChange={v => props.set(v)} />;
+  } else if (props.field.type === "number") {
+    return <NumberFormField value={props.value} onChange={v => props.set(v)} />;
+  } else if (props.field.type === "range") {
+    return (
+      <RangeFormField
+        value={props.value}
+        onChange={v => props.set(v)}
+        min={props.field.min}
+        max={props.field.max}
+      />
+    );
+  } else if (props.field.type === "enum") {
+    return (
+      <EnumFormField
+        value={props.value}
+        onChange={v => props.set(v)}
+        options={props.field.values}
+      />
+    );
+  } else if (props.field.type === "file") {
+    return (
+      <FileUploadFormField
+        onUpload={v => props.set(v)}
+        folder={props.field.folder}
+        fileTypes={props.field.fileTypes}
+      />
+    );
+  } else if (props.field.type === "list") {
+    return <ListFormField values={props.value} onChange={v => props.set(v)} />;
+  } else if (props.field.type === "optional-list") {
+    return (
+      <OptionalListFormField value={props.value} onChange={v => props.set(v)} />
+    );
+  } else {
+    throw new Error("Unknown form type.");
+  }
+};
+
+export default (props: Props) => {
   return (
     <Form>
-      {((props.order || Object.keys(props.template)) as (keyof I)[]).map(
-        (name: keyof I) => {
-          const field = props.template[name];
-          if (field.type === "boolean") {
-            return (
-              <>
-                <label>{props.template[name].label || name}</label>
-                <input
-                  type="checkbox"
-                  checked={props.item[name] as any}
-                  onChange={e => props.setField(name, e.target.checked as any)}
-                />
-              </>
-            );
-          } else if (field.type === "string") {
-            return (
-              <>
-                <label>{props.template[name].label || name}</label>
-                <input
-                  value={props.item[name] as any}
-                  onChange={e => props.setField(name, e.target.value as any)}
-                />
-              </>
-            );
-          } else if (field.type === "number") {
-            return (
-              <>
-                <label>{props.template[name].label || name}</label>
-                <input
-                  type="number"
-                  value={props.item[name] as any}
-                  onChange={e =>
-                    props.setField(name, parseInt(e.target.value, 10) as any)
-                  }
-                />
-              </>
-            );
-          } else if (field.type === "range") {
-            return (
-              <>
-                <label>{props.template[name].label || name}</label>
-                <input
-                  type="range"
-                  value={props.item[name] as any}
-                  onChange={e =>
-                    props.setField(name, parseInt(e.target.value, 10) as any)
-                  }
-                  min={(field as RangeFormType).min}
-                  max={(field as RangeFormType).max}
-                />
-                {(props.item[name] as any) > 0 && "+"}
-                {props.item[name]}
-              </>
-            );
-          } else if (field.type === "enum") {
-            return (
-              <>
-                <label>{props.template[name].label || name}</label>
-                <Select
-                  options={(field as any).values.map(v => ({
-                    label: v,
-                    value: v,
-                  }))}
-                  value={{ label: props.item[name], value: props.item[name] }}
-                  onChange={({ value }: any) => {
-                    props.setField(name, value);
-                  }}
-                />
-              </>
-            );
-          } else if (field.type === "file") {
-            return (
-              <>
-                <label>{props.template[name].label || name}</label>
-                <input
-                  type="file"
-                  accept={((field as any).fileTypes || []).join(",")}
-                  onChange={async e => {
-                    if (e.target.files == null || e.target.files.length === 0) {
-                      return;
-                    }
-                    const file = e.target.files[0];
-                    const id = `${(field as any).folder}/${newUUID()}`;
-                    await firebase
-                      .storage()
-                      .ref(id)
-                      .put(file, { contentType: file.type });
-                    props.setField(name, id as any);
-                  }}
-                />
-              </>
-            );
-          }
-        },
-      )}
+      {(props.order || Object.keys(props.template)).map(name => {
+        const field = props.template[name];
+        return (
+          <React.Fragment key={name}>
+            <label>{field.label || name}</label>
+            <FormField
+              field={field}
+              value={props.item[name]}
+              set={v => props.setField(name, v)}
+            />
+          </React.Fragment>
+        );
+      })}
     </Form>
   );
 };
