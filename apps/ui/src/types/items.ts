@@ -1,6 +1,4 @@
-type Rarity = "common" | "uncommon" | "rare" | "very rare" | "legendary";
-
-enum Stat {
+export enum Stat {
   Strength = "STR",
   Dexterity = "DEX",
   Constitution = "CON",
@@ -17,13 +15,30 @@ enum Coin {
   Electrum = "ep",
 }
 
+export enum ItemType {
+  Weapon = "weapon",
+  Shield = "shield",
+  Armor = "armor",
+  Caster = "caster",
+  AdventuringGear = "adventuring gear",
+  WondrousItem = "wondrous item",
+}
+
+export enum Rarity {
+  Common = "common",
+  Uncommon = "uncommon",
+  Rare = "rare",
+  VeryRare = "very rare",
+  Legendary = "legendary",
+}
+
 interface Cost {
   amount: number;
   unit: Coin;
 }
 
 interface BaseItem {
-  type: string;
+  type: ItemType;
   name: string;
   rarity: Rarity;
   requiresAttunement?: true | string[];
@@ -36,35 +51,47 @@ interface BaseItem {
 }
 
 export interface Weapon extends BaseItem {
-  type: "weapon";
+  type: ItemType.Weapon;
   subtype: string;
   modifier?: number;
   labels?: { [modifier: string]: true | string };
 }
 
 export interface Shield extends BaseItem {
-  type: "shield";
+  type: ItemType.Shield;
   modifier: number;
+}
+
+export enum ArmorSubType {
+  Light = "light",
+  Medium = "medium",
+  Heavy = "heavy",
 }
 
 export interface Armor extends BaseItem {
-  type: "armor";
+  type: ItemType.Armor;
   modifier: number;
   baseStat: Stat;
-  subType: "light" | "medium" | "heavy";
+  subType: ArmorSubType;
+}
+
+export enum CasterSubType {
+  Wand = "wand",
+  Rod = "rod",
+  Staff = "staff",
 }
 
 export interface Caster extends BaseItem {
-  type: "caster";
-  subtype: "wand" | "rod" | "staff";
+  type: ItemType.Caster;
+  subtype: CasterSubType;
 }
 
 export interface AdventuringGear extends BaseItem {
-  type: "adventuring gear";
+  type: ItemType.AdventuringGear;
 }
 
 export interface WondrousItem extends BaseItem {
-  type: "wondrous item";
+  type: ItemType.WondrousItem;
 }
 
 export type Item =

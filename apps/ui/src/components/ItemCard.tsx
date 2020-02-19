@@ -3,14 +3,10 @@ import { Item, Weapon, Caster } from "../types/items";
 import FirebaseImage from "./common/FirebaseImage";
 import ItemCardLayout from "./ItemCardLayout";
 import styled from "@emotion/styled";
-import { useDocumentData } from "react-firebase-hooks/firestore";
-import * as firebase from "firebase";
 import DynamicLayout from "./common/DynamicLayout";
 
-type ItemId = string;
-
 export interface Props {
-  id: ItemId;
+  item: Item;
 }
 
 const modifier = (m: number) => {
@@ -105,14 +101,7 @@ const Description = styled.div`
   text-align: center;
 `;
 
-export default ({ id }: Props) => {
-  const [item, loading, error] = useDocumentData(
-    firebase
-      .firestore()
-      .collection("items")
-      .doc(id),
-  );
-
+export default ({ item }: Props) => {
   const layoutRef = React.useRef<DynamicLayout>(null);
   const recalculateSize = React.useCallback(() => {
     if (layoutRef.current != null) {
@@ -120,32 +109,30 @@ export default ({ id }: Props) => {
     }
   }, [layoutRef]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error.message}</div>;
-  }
+  React.useEffect(() => {
+    recalculateSize();
+  }, [item]);
 
   return (
     <Card>
       <Header>{item.name}</Header>
       <Summary>{getSummary(item)}</Summary>
       <ItemCardLayout ref={layoutRef}>
-        <FirebaseImage
-          className="image"
-          key="image"
-          url={`images/${item.image}.png`}
-          onLoad={recalculateSize}
-          style={{
-            width: "auto",
-            height: "auto",
-            maxHeight: "128px",
-            maxWidth: "100%",
-            objectFit: "contain",
-          }}
-        />
+        {item.image && (
+          <FirebaseImage
+            className="image"
+            key="image"
+            url={item.image}
+            onLoad={recalculateSize}
+            style={{
+              width: "auto",
+              height: "auto",
+              maxHeight: "128px",
+              maxWidth: "100%",
+              objectFit: "contain",
+            }}
+          />
+        )}
         <Description className="description">{item.description}</Description>
       </ItemCardLayout>
     </Card>

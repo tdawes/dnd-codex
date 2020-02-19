@@ -1,6 +1,7 @@
 import * as React from "react";
 import ItemCard from "./components/ItemCard";
 import styled from "@emotion/styled";
+import NewItemForm from "./components/NewItemForm";
 
 const Page = styled.div`
   width: 210mm;
@@ -22,7 +23,8 @@ const Cell = styled.div`
 
 export default () => (
   <React.Fragment>
-    <Page>
+    <NewItemForm />
+    {/* <Page>
       <Cell>
         <ItemCard id="stormbinder" />
       </Cell>
@@ -40,6 +42,6 @@ export default () => (
       <Cell>
         <ItemCard id="dust-of-sneezing-and-choking" />
       </Cell>
-    </Page>
+    </Page> */}
   </React.Fragment>
 );
