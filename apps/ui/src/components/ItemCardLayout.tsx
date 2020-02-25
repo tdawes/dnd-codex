@@ -7,14 +7,14 @@ export interface Props {
 }
 
 const Layout = styled.div<{ value: number }>`
-  font-size: ${props => props.value}px;
+  font-size: ${props => props.value / 2}px;
 
   &.block {
     display: flex;
     flex-direction: column;
 
     .image {
-      margin-bottom: 24px;
+      margin-bottom: 12px;
     }
 
     .description {
@@ -27,6 +27,8 @@ const Layout = styled.div<{ value: number }>`
 
     .image {
       float: left;
+      margin: 6px;
+      width: 128px;
     }
 
     .description {
@@ -42,13 +44,13 @@ export default React.forwardRef<DynamicLayout, Props>(
         ref={ref}
         layouts={[
           {
-            min: 14,
-            max: 20,
+            min: 14 * 2,
+            max: 20 * 2,
             layout: "block",
           },
           {
-            min: 14,
-            max: 20,
+            min: 14 * 2,
+            max: 20 * 2,
             layout: "wrapped",
           },
         ]}

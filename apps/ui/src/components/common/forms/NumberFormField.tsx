@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Input } from "theme-ui";
 
 export interface Props {
   value: number;
@@ -6,7 +7,7 @@ export interface Props {
 }
 
 export default (props: Props) => (
-  <input
+  <Input
     type="number"
     value={props.value}
     onChange={e => props.onChange(parseInt(e.target.value, 10))}

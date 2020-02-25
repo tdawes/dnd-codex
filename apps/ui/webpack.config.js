@@ -6,7 +6,7 @@ const APP_PATH = path.resolve(__dirname, "src");
 const PUBLIC_PATH = path.resolve(__dirname, "public");
 
 module.exports = {
-  entry: APP_PATH,
+  entry: [path.join(APP_PATH, "index.tsx")],
 
   output: {
     filename: "bundle.js",
@@ -28,11 +28,26 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.s?css$/,
-        loader: ["style-loader", "css-loader", "sass-loader"],
+        test: /\.css$/,
+        oneOf: [
+          {
+            loader: [
+              "style-loader",
+              { loader: "css-loader", options: { importLoaders: 1 } },
+              "postcss-loader",
+            ],
+            exclude: /node_modules/,
+          },
+          {
+            loader: [
+              "style-loader",
+              { loader: "css-loader", options: { importLoaders: 1 } },
+            ],
+          },
+        ],
       },
       {
-        test: /\.(png|jpe?g|svg|ico)$/,
+        test: /\.(png|jpe?g|svg|ico|eot|woff|woff2|ttf)$/,
         loader: "file-loader",
       },
     ],

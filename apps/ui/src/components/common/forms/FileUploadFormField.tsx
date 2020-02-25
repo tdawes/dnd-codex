@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as firebase from "firebase";
 import newUUID from "uuid/v4";
+import { Input } from "theme-ui";
 
 export interface Props {
   onUpload: (path: string) => any;
@@ -9,7 +10,7 @@ export interface Props {
 }
 
 export default (props: Props) => (
-  <input
+  <Input
     type="file"
     accept={(props.fileTypes || []).join(",")}
     onChange={async e => {

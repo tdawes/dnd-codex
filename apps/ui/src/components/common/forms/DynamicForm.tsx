@@ -1,6 +1,5 @@
 import * as _ from "lodash";
 import * as React from "react";
-import styled from "@emotion/styled";
 import { Item } from "../../../types/items";
 import CheckboxFormField from "./CheckboxFormField";
 import TextFormField from "./TextFormField";
@@ -10,6 +9,7 @@ import EnumFormField from "./EnumFormField";
 import FileUploadFormField from "./FileUploadFormField";
 import ListFormField from "./ListFormField";
 import OptionalListFormField from "./OptionalListFormField";
+import { Label } from "theme-ui";
 
 interface BaseFormType {
   label?: string;
@@ -32,6 +32,7 @@ export interface RangeFormType extends BaseFormType {
 
 export interface StringFormType extends BaseFormType {
   type: "string";
+  multiline?: boolean;
 }
 
 export interface BooleanFormType extends BaseFormType {
@@ -69,11 +70,6 @@ export interface Props {
   order?: string[];
 }
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
 export interface FormFieldProps {
   field: FormType;
   value: any;
@@ -86,7 +82,13 @@ const FormField = (props: FormFieldProps) => {
       <CheckboxFormField checked={!!props.value} onChange={v => props.set(v)} />
     );
   } else if (props.field.type === "string") {
-    return <TextFormField value={props.value} onChange={v => props.set(v)} />;
+    return (
+      <TextFormField
+        value={props.value}
+        onChange={v => props.set(v)}
+        multiline={props.field.multiline}
+      />
+    );
   } else if (props.field.type === "number") {
     return <NumberFormField value={props.value} onChange={v => props.set(v)} />;
   } else if (props.field.type === "range") {
@@ -127,20 +129,24 @@ const FormField = (props: FormFieldProps) => {
 
 export default (props: Props) => {
   return (
-    <Form>
+    <table>
       {(props.order || Object.keys(props.template)).map(name => {
         const field = props.template[name];
         return (
-          <React.Fragment key={name}>
-            <label>{field.label || name}</label>
-            <FormField
-              field={field}
-              value={props.item[name]}
-              set={v => props.setField(name, v)}
-            />
-          </React.Fragment>
+          <tr key={name}>
+            <td>
+              <Label>{field.label || name}</Label>
+            </td>
+            <td>
+              <FormField
+                field={field}
+                value={props.item[name]}
+                set={v => props.setField(name, v)}
+              />
+            </td>
+          </tr>
         );
       })}
-    </Form>
+    </table>
   );
 };

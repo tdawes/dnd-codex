@@ -1,47 +1,22 @@
 import * as React from "react";
-import ItemCard from "./components/ItemCard";
-import styled from "@emotion/styled";
-import NewItemForm from "./components/NewItemForm";
+import { ThemeProvider } from "theme-ui";
+import theme from "./theme";
+import ItemCards from "./components/printing/ItemCards";
 
-const Page = styled.div`
-  width: 210mm;
-  height: 290mm;
+const items = [
+  "stormbinder",
+  "augur-stone",
+  "ring-of-roses",
+  "rope-of-climbing",
+  "dust-of-sneezing-and-choking",
+  "JajgGA63zXw4svExaZ8I",
+  "vXOGn6xvqU6Dz7fbzkN1",
+];
 
-  display: grid;
-  grid-template-columns: 50% 50%;
-  page-break-after: always;
-`;
-
-const Cell = styled.div`
-  border-style: dashed;
-  margin: 1em;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-export default () => (
-  <React.Fragment>
-    <NewItemForm />
-    {/* <Page>
-      <Cell>
-        <ItemCard id="stormbinder" />
-      </Cell>
-      <Cell>
-        <ItemCard id="augur-stone" />
-      </Cell>
-      <Cell>
-        <ItemCard id="ring-of-roses" />
-      </Cell>
-      <Cell>
-        <ItemCard id="rope-of-climbing" />
-      </Cell>
-    </Page>
-    <Page>
-      <Cell>
-        <ItemCard id="dust-of-sneezing-and-choking" />
-      </Cell>
-    </Page> */}
-  </React.Fragment>
-);
+export default () => {
+  return (
+    <ThemeProvider theme={theme}>
+      <ItemCards items={items} />
+    </ThemeProvider>
+  );
+};

@@ -1,5 +1,5 @@
 import * as React from "react";
-import Select from "react-select";
+import { Select } from "theme-ui";
 
 export interface Props {
   value: string;
@@ -9,13 +9,13 @@ export interface Props {
 
 export default (props: Props) => (
   <Select
-    options={props.options.map(v => ({
-      label: v,
-      value: v,
-    }))}
-    value={{ label: props.value, value: props.value }}
-    onChange={({ value }: any) => {
-      props.onChange(value);
+    value={props.value}
+    onChange={e => {
+      props.onChange(e.target.value);
     }}
-  />
+  >
+    {props.options.map(option => (
+      <option key={option}>{option}</option>
+    ))}
+  </Select>
 );

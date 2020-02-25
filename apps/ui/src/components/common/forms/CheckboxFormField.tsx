@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Checkbox, Label } from "theme-ui";
 
 export interface Props {
   checked: boolean;
@@ -6,9 +7,10 @@ export interface Props {
 }
 
 export default (props: Props) => (
-  <input
-    type="checkbox"
-    checked={props.checked}
-    onChange={e => props.onChange(e.target.checked)}
-  />
+  <Label>
+    <Checkbox
+      checked={props.checked}
+      onChange={() => props.onChange(!props.checked)}
+    />
+  </Label>
 );

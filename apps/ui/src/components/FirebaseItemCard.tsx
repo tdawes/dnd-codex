@@ -7,9 +7,11 @@ export type ItemId = string;
 
 export interface Props {
   id: ItemId;
+  frontRef?: React.RefObject<HTMLDivElement>;
+  backRef?: React.RefObject<HTMLDivElement>;
 }
 
-export default ({ id }: Props) => {
+export default ({ id, frontRef, backRef }: Props) => {
   const [item, loading, error] = useDocumentData(
     firebase
       .firestore()
@@ -25,5 +27,5 @@ export default ({ id }: Props) => {
     return <div>{error.message}</div>;
   }
 
-  return <ItemCard item={item} />;
+  return <ItemCard item={item} frontRef={frontRef} backRef={backRef} />;
 };

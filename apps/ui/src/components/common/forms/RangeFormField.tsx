@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Flex, Slider } from "theme-ui";
 
 export interface Props {
   value: number;
@@ -8,9 +9,8 @@ export interface Props {
 }
 
 export default (props: Props) => (
-  <>
-    <input
-      type="range"
+  <Flex>
+    <Slider
       value={props.value}
       onChange={e => props.onChange(parseInt(e.target.value, 10))}
       min={props.min}
@@ -18,5 +18,5 @@ export default (props: Props) => (
     />
     {props.value > 0 && "+"}
     {props.value}
-  </>
+  </Flex>
 );
