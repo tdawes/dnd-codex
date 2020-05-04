@@ -130,23 +130,25 @@ const FormField = (props: FormFieldProps) => {
 export default (props: Props) => {
   return (
     <table>
-      {(props.order || Object.keys(props.template)).map(name => {
-        const field = props.template[name];
-        return (
-          <tr key={name}>
-            <td>
-              <Label>{field.label || name}</Label>
-            </td>
-            <td>
-              <FormField
-                field={field}
-                value={props.item[name]}
-                set={v => props.setField(name, v)}
-              />
-            </td>
-          </tr>
-        );
-      })}
+      <tbody>
+        {(props.order || Object.keys(props.template)).map(name => {
+          const field = props.template[name];
+          return (
+            <tr key={name}>
+              <td>
+                <Label>{field.label || name}</Label>
+              </td>
+              <td>
+                <FormField
+                  field={field}
+                  value={props.item[name]}
+                  set={v => props.setField(name, v)}
+                />
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
     </table>
   );
 };

@@ -7,9 +7,16 @@ export interface Props {
   items: string[];
 }
 
-const Page = styled.div`
+const Page = styled.div<{ offset?: number }>`
   width: 210mm;
-  height: 290mm;
+  max-width: 210mm;
+  height: 297mm;
+  max-height: 297mm;
+  margin: 0;
+
+  @media print {
+    margin-left: ${props => `${props.offset ?? 0}mm`};
+  }
 
   display: grid;
   grid-template-columns: 50% 50%;
@@ -18,7 +25,7 @@ const Page = styled.div`
 
 const Cell = styled.div`
   border-style: dashed;
-  margin: 1em;
+  margin: 0.1em;
 
   display: flex;
   align-items: center;
@@ -29,7 +36,40 @@ const Hidden = styled.div`
   display: none;
 `;
 
-const ItemCardPage = ({ items }: { items: string[] }) => {
+const StyledControls = styled.div`
+  @media print {
+    display: none;
+  }
+`;
+
+const Controls = ({
+  offset,
+  setOffset,
+}: {
+  offset: number;
+  setOffset: (o: number) => any;
+}) => (
+  <StyledControls>
+    Print Offset:
+    <input
+      type="number"
+      value={offset}
+      step={0.1}
+      min={-10}
+      max={10}
+      onChange={e => setOffset(parseFloat(e.target.value))}
+    />
+    mm
+  </StyledControls>
+);
+
+const ItemCardPage = ({
+  items,
+  offset,
+}: {
+  items: string[];
+  offset: number;
+}) => {
   const item1FrontRef = React.useRef<HTMLDivElement>(null);
   const item1BackRef = React.useRef<HTMLDivElement>(null);
   const item2FrontRef = React.useRef<HTMLDivElement>(null);
@@ -47,7 +87,7 @@ const ItemCardPage = ({ items }: { items: string[] }) => {
         <Cell ref={item3FrontRef} />
         <Cell ref={item4FrontRef} />
       </Page>
-      <Page>
+      <Page offset={offset}>
         <Cell ref={item2BackRef} />
         <Cell ref={item1BackRef} />
         <Cell ref={item4BackRef} />
@@ -87,10 +127,25 @@ const ItemCardPage = ({ items }: { items: string[] }) => {
   );
 };
 
-export default ({ items }: Props) => (
-  <>
-    {_.chunk(items, 4).map((chunk, i) => (
-      <ItemCardPage key={i} items={chunk} />
-    ))}
-  </>
-);
+const ITEMS = [
+  "19CF6Vwv1MlbnFG6F7e5",
+  "qWv6SkJb9fPwE4zuv8qm",
+  "sEtYFEf0vGytQV6Kjw75",
+  "siWlG2yjX8j9UXrIx9SP",
+];
+
+export default ({ items }: Props) => {
+  const [printOffset, setPrintOffset] = React.useState(0);
+
+  return (
+    <>
+      <Controls offset={printOffset} setOffset={setPrintOffset} />
+      {_.chunk(
+        items.filter(item => ITEMS.includes(item)),
+        4,
+      ).map((chunk, i) => (
+        <ItemCardPage key={i} items={chunk} offset={printOffset} />
+      ))}
+    </>
+  );
+};

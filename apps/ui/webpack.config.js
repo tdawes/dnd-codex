@@ -1,4 +1,4 @@
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+// const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
@@ -16,6 +16,7 @@ module.exports = {
 
   resolve: {
     extensions: [".ts", ".tsx", ".js", "jsx", ".json"],
+    modules: ["node_modules"],
   },
 
   devtool: "source-map",
@@ -58,6 +59,6 @@ module.exports = {
       inject: true,
       template: path.join(PUBLIC_PATH, "index.html"),
     }),
-    new ForkTsCheckerWebpackPlugin(),
+    // new ForkTsCheckerWebpackPlugin(),
   ],
 };

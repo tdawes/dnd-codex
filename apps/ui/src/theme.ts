@@ -51,7 +51,7 @@ export default {
       padding: 2,
       boxSizing: "border-box",
       "&:after": {
-        content: "",
+        content: "' '",
         height: 1,
       },
     },

@@ -7,3 +7,5 @@
 .envrc.local
 
 yarn-error.log
+
+.DS_Store

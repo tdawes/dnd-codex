@@ -11,6 +11,7 @@ const Error = ({ error }: { error: Error }) => <div>{error.message}</div>;
 
 export default ({ url, ...props }: Props) => {
   const ref = firebase.storage().ref(url);
+
   const [downloadURL, isLoading, error] = useDownloadURL(ref);
 
   if (error) {

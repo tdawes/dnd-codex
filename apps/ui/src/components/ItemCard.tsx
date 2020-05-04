@@ -76,7 +76,7 @@ const Card = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 1em;
-  margin: 1em;
+  margin: 0.5em;
   overflow: hidden;
   box-sizing: content-box;
   font-family: pristina;
@@ -302,6 +302,12 @@ class DynamicLayout extends React.Component<Props> {
 
   public componentDidMount() {
     this.process();
+  }
+
+  public componentDidUpdate(prevProps: Props) {
+    if (prevProps.item !== this.props.item) {
+      this.process();
+    }
   }
 
   public async process() {
