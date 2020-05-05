@@ -35,7 +35,6 @@ module.exports = {
             loader: [
               "style-loader",
               { loader: "css-loader", options: { importLoaders: 1 } },
-              "postcss-loader",
             ],
             exclude: /node_modules/,
           },
