@@ -1,18 +1,12 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
-import { Character } from "../../types/character";
 import * as React from "react";
 
-export interface Props {
-  character: Character;
-  updateCharacter: (f: (draft: Character) => Character | void) => void;
-}
-
-const Features = (props: Props) => <div>Features</div>;
-const Weapons = (props: Props) => <div>Weapons</div>;
-const Spells = (props: Props) => <div>Spells</div>;
-const Inventory = (props: Props) => <div>Inventory</div>;
-const PartyInventory = (props: Props) => <div>Party Inventory</div>;
+const Features = () => <div>Features</div>;
+const Weapons = () => <div>Weapons</div>;
+const Spells = () => <div>Spells</div>;
+const Inventory = () => <div>Inventory</div>;
+const PartyInventory = () => <div>Party Inventory</div>;
 
 const tabs = {
   Features: {
@@ -37,7 +31,7 @@ const tabs = {
   },
 };
 
-export default (props: Props) => {
+export default () => {
   const [currentTab, setTab] = React.useState(Object.keys(tabs)[0]);
   const Tab = tabs[currentTab].component;
   return (
@@ -57,7 +51,7 @@ export default (props: Props) => {
           </div>
         ))}
       </div>
-      <Tab {...props} />
+      <Tab />
     </div>
   );
 };

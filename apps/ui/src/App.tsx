@@ -9,6 +9,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import CharacterSheet from "./components/CharacterSheet";
 import { useImmer } from "use-immer";
 import { Character, Attribute, Skill } from "./types/character";
+import CharacterContext from "./components/CharacterSheet/CharacterContext";
 
 const AllItems = () => {
   const query = firebase.firestore().collection("items");
@@ -79,10 +80,9 @@ export default () => {
   return (
     <ThemeProvider theme={theme}>
       <div sx={{ margin: "1em" }}>
-        <CharacterSheet
-          character={character}
-          updateCharacter={updateCharacter}
-        />
+        <CharacterContext.Provider value={{ character, updateCharacter }}>
+          <CharacterSheet />
+        </CharacterContext.Provider>
       </div>
       {/* <NewItemForm /> */}
       {/* <AllItems /> */}

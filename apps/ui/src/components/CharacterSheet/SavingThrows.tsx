@@ -1,52 +1,42 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
-import {
-  Character,
-  ATTRIBUTES_IN_ORDER,
-  Attribute,
-} from "../../types/character";
+import * as React from "react";
+import { ATTRIBUTES_IN_ORDER, Attribute } from "../../types/character";
 import { addSign, getModifier } from "../../utils/modifiers";
 import { getProficiencyBonus } from "../../utils/characters";
 import { Checkbox } from "./Checkbox";
-
-export interface Props {
-  character: Character;
-  updateCharacter: (f: (draft: Character) => Character | void) => void;
-}
+import CharacterContext from "./CharacterContext";
 
 interface SavingThrowProps {
   attribute: Attribute;
-  character: Character;
-  updateCharacter: (f: (draft: Character) => Character | void) => void;
 }
 
-export const SavingThrow = ({
-  attribute,
-  character,
-  updateCharacter,
-}: SavingThrowProps) => (
-  <div sx={{ display: "flex", justifyContent: "space-around" }}>
-    <Checkbox
-      value={character.proficiencies.savingThrows[attribute]}
-      onChange={p =>
-        updateCharacter(c => {
-          c.proficiencies.savingThrows[attribute] = p;
-        })
-      }
-    />
-    <div>{attribute}</div>
-    <div>
-      {addSign(
-        getModifier(character.attributes[attribute]) +
-          (character.proficiencies.savingThrows[attribute]
-            ? getProficiencyBonus(character)
-            : 0),
-      )}
+export const SavingThrow = ({ attribute }: SavingThrowProps) => {
+  const { character, updateCharacter } = React.useContext(CharacterContext);
+  return (
+    <div sx={{ display: "flex", justifyContent: "space-around" }}>
+      <Checkbox
+        value={character.proficiencies.savingThrows[attribute]}
+        onChange={p =>
+          updateCharacter(c => {
+            c.proficiencies.savingThrows[attribute] = p;
+          })
+        }
+      />
+      <div>{attribute}</div>
+      <div>
+        {addSign(
+          getModifier(character.attributes[attribute]) +
+            (character.proficiencies.savingThrows[attribute]
+              ? getProficiencyBonus(character)
+              : 0),
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
-export default (props: Props) => (
+export default () => (
   <section
     sx={{
       display: "flex",
@@ -58,7 +48,7 @@ export default (props: Props) => (
   >
     <h4 sx={{ flexBasis: "100%", textAlign: "center" }}>Saving Throws</h4>
     {ATTRIBUTES_IN_ORDER.map(attr => (
-      <SavingThrow key={attr} attribute={attr} {...props} />
+      <SavingThrow key={attr} attribute={attr} />
     ))}
   </section>
 );

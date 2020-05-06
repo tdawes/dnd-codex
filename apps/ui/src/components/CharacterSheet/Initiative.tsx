@@ -1,15 +1,20 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
-import { Character, Attribute } from "../../types/character";
+import * as React from "react";
+import { Attribute } from "../../types/character";
 import { addSign, getModifier } from "../../utils/modifiers";
+import CharacterContext from "./CharacterContext";
 
-export interface Props {
-  character: Character;
-}
-
-export default ({ character }: Props) => (
-  <div sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-    <h4>Initiative</h4>
-    <div>{addSign(getModifier(character.attributes[Attribute.Dexterity]))}</div>
-  </div>
-);
+export default () => {
+  const { character } = React.useContext(CharacterContext);
+  return (
+    <div
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <h4>Initiative</h4>
+      <div>
+        {addSign(getModifier(character.attributes[Attribute.Dexterity]))}
+      </div>
+    </div>
+  );
+};

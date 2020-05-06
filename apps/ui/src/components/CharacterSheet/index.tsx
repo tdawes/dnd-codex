@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
 import Header from "./Header";
-import { Character } from "../../types/character";
 import Attributes from "./Attributes";
 import SavingThrows from "./SavingThrows";
 import Skills from "./Skills";
@@ -14,14 +13,9 @@ import HP from "./HP";
 import Inspiration from "./Inspiration";
 import Other from "./Other";
 
-export interface Props {
-  character: Character;
-  updateCharacter: (f: (draft: any) => Character | void) => void;
-}
-
-export default (props: Props) => (
+export default () => (
   <div sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
-    <Header {...props} />
+    <Header />
     <div sx={{ display: "flex", flexDirection: "row", flexGrow: 1 }}>
       <div
         sx={{
@@ -39,26 +33,26 @@ export default (props: Props) => (
             flexDirection: "column",
           }}
         >
-          <Attributes {...props} />
-          <SavingThrows {...props} />
-          <PassiveSkills {...props} />
+          <Attributes />
+          <SavingThrows />
+          <PassiveSkills />
         </div>
         <div sx={{ height: "100%", flexBasis: "50%" }}>
           <div sx={{ display: "flex", justifyContent: "space-around" }}>
-            <ProficiencyBonus {...props} />
-            <Initiative {...props} />
+            <ProficiencyBonus />
+            <Initiative />
           </div>
-          <Skills {...props} />
+          <Skills />
         </div>
       </div>
       <div sx={{ height: "100%", flexBasis: "50%" }}>
         <div sx={{ display: "flex", justifyContent: "space-around" }}>
-          <AC {...props} />
-          <Speed {...props} />
-          <HP {...props} />
-          <Inspiration {...props} />
+          <AC />
+          <Speed />
+          <HP />
+          <Inspiration />
         </div>
-        <Other {...props} />
+        <Other />
       </div>
     </div>
   </div>

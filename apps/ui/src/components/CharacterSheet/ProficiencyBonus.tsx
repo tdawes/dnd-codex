@@ -1,17 +1,18 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui";
-import { Character } from "../../types/character";
+import * as React from "react";
 import { getProficiencyBonus } from "../../utils/characters";
 import { addSign } from "../../utils/modifiers";
+import CharacterContext from "./CharacterContext";
 
-export interface Props {
-  character: Character;
-  updateCharacter: (f: (draft: Character) => Character | void) => void;
-}
-
-export default ({ character }: Props) => (
-  <div sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-    <h4>Proficiency</h4>
-    <div>{addSign(getProficiencyBonus(character))}</div>
-  </div>
-);
+export default () => {
+  const { character } = React.useContext(CharacterContext);
+  return (
+    <div
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <h4>Proficiency</h4>
+      <div>{addSign(getProficiencyBonus(character))}</div>
+    </div>
+  );
+};
