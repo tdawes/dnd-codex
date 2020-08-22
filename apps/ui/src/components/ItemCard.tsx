@@ -119,12 +119,14 @@ const Description = styled.div<{ fontSize: number; inline: number }>`
 const InlineWrapper = styled.div<{ inline: number }>`
   display: ${props => (props.inline ? "block" : "flex")};
   flex-direction: column;
+  align-items: center;
 `;
 
 const StyledFirebaseImage = styled(FirebaseImage)<{ inline: number }>`
-  width: auto;
-  height: auto;
-  max-height: 128px;
+  // width: auto;
+  // height: auto;
+  // max-height: 128px;
+  max-height: 100%;
   max-width: 100%;
   object-fit: contain;
   margin-bottom: 12px;
@@ -436,7 +438,7 @@ export default ({ item, frontRef, backRef }: Props) => {
           };
 
           return (
-            <>
+            <Flex>
               {renderFrontCard(
                 <FrontCard
                   parentRef={frontParent}
@@ -458,7 +460,7 @@ export default ({ item, frontRef, backRef }: Props) => {
                   descriptionFontSize={fontSize}
                 />,
               )}
-            </>
+            </Flex>
           );
         }}
       </DynamicLayout>

@@ -51,10 +51,12 @@ export default () => (
     <h4 sx={{ flexBasis: "100%", textAlign: "center" }}>Skills</h4>
     <table sx={{ "& td,th": { textAlign: "center" } }}>
       <thead>
-        <th>Prof</th>
-        <th>Skill</th>
-        <th>Attr</th>
-        <th>Mod</th>
+        <tr>
+          <th>Prof</th>
+          <th>Skill</th>
+          <th>Attr</th>
+          <th>Mod</th>
+        </tr>
       </thead>
       <tbody>
         {SKILLS_IN_ORDER.map(skill => (

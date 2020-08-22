@@ -13,10 +13,12 @@ export default () => {
       <h4>HP</h4>
       <table>
         <thead>
-          <th>Current</th>
-          <th />
-          <th>Max</th>
-          <th>Temp</th>
+          <tr>
+            <th>Current</th>
+            <th />
+            <th>Max</th>
+            <th>Temp</th>
+          </tr>
         </thead>
         <tbody>
           <tr>
@@ -36,7 +38,7 @@ export default () => {
                 value={`${character.hp.max}`}
                 onChange={m =>
                   updateCharacter(c => {
-                    c.hp.max = parseInt(m);
+                    c.hp.max = parseInt(m, 10);
                   })
                 }
               />

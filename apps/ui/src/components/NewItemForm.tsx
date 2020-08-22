@@ -2,13 +2,13 @@ import * as _ from "lodash";
 import * as React from "react";
 import {
   ItemType,
-  Stat,
   Rarity,
   CasterSubType,
   ArmorSubType,
   Item,
   WeaponSubType,
-} from "../types/items";
+  Attribute,
+} from "../types";
 import ItemCard from "./ItemCard";
 import DynamicForm, {
   Template,
@@ -30,7 +30,7 @@ const defaults = {
   },
   [ItemType.Armor]: {
     subtype: ArmorSubType.Light,
-    baseStat: Stat.Strength,
+    baseStat: Attribute.Strength,
     modifier: 0,
   },
   [ItemType.Weapon]: {
@@ -49,7 +49,7 @@ const fields: { [key: string]: FormType } = {
   type: {
     type: "enum",
     label: "Item Type",
-    values: Object.values(ItemType),
+    values: Object.values(ItemType).filter(type => type !== ItemType.Pack),
   },
   name: {
     type: "string",
@@ -83,7 +83,7 @@ const fields: { [key: string]: FormType } = {
   },
 };
 
-const templates: { [K in typeof ItemType[keyof typeof ItemType]]: Template } = {
+const templates: { [K in Exclude<ItemType, ItemType.Pack>]: Template } = {
   [ItemType.Weapon]: {
     name: fields.name,
     subtype: {

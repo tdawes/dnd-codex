@@ -1,11 +1,4 @@
-export enum Stat {
-  Strength = "STR",
-  Dexterity = "DEX",
-  Constitution = "CON",
-  Wisdom = "WIS",
-  Intelligence = "INT",
-  Charisma = "CHA",
-}
+import { Attribute } from "./character";
 
 export enum Coin {
   Gold = "gp",
@@ -22,6 +15,7 @@ export enum ItemType {
   Caster = "caster",
   AdventuringGear = "adventuring gear",
   WondrousItem = "wondrous item",
+  Pack = "pack",
 }
 
 export enum Rarity {
@@ -106,7 +100,7 @@ export enum ArmorSubType {
 export interface Armor extends BaseItem {
   type: ItemType.Armor;
   modifier: number;
-  baseStat: Stat;
+  baseStat: Attribute;
   subType: ArmorSubType;
 }
 
@@ -129,10 +123,16 @@ export interface WondrousItem extends BaseItem {
   type: ItemType.WondrousItem;
 }
 
+export interface PackItem extends BaseItem {
+  type: ItemType.Pack;
+  contents: string[];
+}
+
 export type Item =
   | Weapon
   | Shield
   | Armor
   | Caster
   | AdventuringGear
-  | WondrousItem;
+  | WondrousItem
+  | PackItem;

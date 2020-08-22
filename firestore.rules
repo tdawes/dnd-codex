@@ -4,6 +4,11 @@ service cloud.firestore {
             allow read;
             allow write;
         }
+
+        match /characters/{id} {
+            allow read;
+            allow write;
+        }
         
         function isAdmin() {
             return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin
