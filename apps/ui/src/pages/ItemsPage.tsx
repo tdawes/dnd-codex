@@ -5,6 +5,7 @@ import { jsx } from "theme-ui";
 import { Switch, Route, RouteComponentProps } from "react-router-dom";
 import FirebaseItemCard from "../components/FirebaseItemCard";
 import { useCollection } from "react-firebase-hooks/firestore";
+import NewItemForm from "../components/NewItemForm";
 
 const AllItems = () => {
   const query = firebase.firestore().collection("items");
@@ -43,6 +44,7 @@ const PrintableItemPage = ({ id }) => <div>Printable: {id}</div>;
 export default (props: RouteComponentProps) => (
   <Switch>
     <Route path={props.match.url} exact component={ItemsPage} />
+    <Route path={`${props.match.url}/new`} exact component={NewItemForm}/>
     <Route
       path={`${props.match.url}/:id`}
       exact
